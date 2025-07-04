@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head><title>Buy Chai DApp</title></head>
+<body>
+  <button onclick="connect()">Connect Wallet</button><br/><br/>
+  <input id="name" placeholder="Your name" />
+  <input id="message" placeholder="Your message" />
+  <button onclick="sendChai()">Send Chai</button>
+
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script>
+    let provider, signer, contract;
+    const contractAddress = "YOUR_CONTRACT_ADDRESS"; // 👈 change this
+    const abi = [
+      {
+        "inputs":[
+          {"internalType":"string","name":"name","type":"string"},
+          {"internalType":"string","name":"message","type":"string"}
+        ],
+        "name":"buyChai",
+        "outputs":[],
+        "stateMutability":"payable",
+        "type":"function"
+      }
+    ];
+
+    async function connect() {
+      provider = new ethers.providers.Web3Provider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      signer = provider.getSigner();
+      contract = new ethers.Contract(contractAddress, abi, signer);
+      alert("Wallet Connected!");
+    }
+
+    async function sendChai() {
+      const name = document.getElementById("name").value;
+      const message = document.getElementById("message").value;
+      const tx = await contract.buyChai(name, message, {
+        value: ethers.utils.parseEther("0.001")
+      });
+      await tx.wait();
+      alert("Chai Sent!");
+    }
+  </script>
+</body>
+</html>
