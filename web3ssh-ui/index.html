@@ -1,46 +1,85 @@
 <!DOCTYPE html>
-<html>
-<head><title>Buy Chai DApp</title></head>
-<body>
-  <button onclick="connect()">Connect Wallet</button><br/><br/>
-  <input id="name" placeholder="Your name" />
-  <input id="message" placeholder="Your message" />
-  <button onclick="sendChai()">Send Chai</button>
+<html lang="en">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GreenChain | Carbon Offset Marketplace</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    let provider, signer, contract;
-    const contractAddress = "YOUR_CONTRACT_ADDRESS"; // 👈 change this
-    const abi = [
-      {
-        "inputs":[
-          {"internalType":"string","name":"name","type":"string"},
-          {"internalType":"string","name":"message","type":"string"}
-        ],
-        "name":"buyChai",
-        "outputs":[],
-        "stateMutability":"payable",
-        "type":"function"
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            greenchain: '#1f7a3e',
+            lightbg: '#f8f9fa',
+            softgray: '#e2e8f0'
+          }
+        }
       }
-    ];
-
-    async function connect() {
-      provider = new ethers.providers.Web3Provider(window.ethereum);
-      await provider.send("eth_requestAccounts", []);
-      signer = provider.getSigner();
-      contract = new ethers.Contract(contractAddress, abi, signer);
-      alert("Wallet Connected!");
-    }
-
-    async function sendChai() {
-      const name = document.getElementById("name").value;
-      const message = document.getElementById("message").value;
-      const tx = await contract.buyChai(name, message, {
-        value: ethers.utils.parseEther("0.001")
-      });
-      await tx.wait();
-      alert("Chai Sent!");
     }
   </script>
+</head>
+<body class="bg-lightbg text-gray-800 font-sans">
+  <!-- Nav -->
+  <nav class="p-4 shadow bg-white flex justify-between items-center">
+    <h1 class="text-2xl font-bold text-greenchain flex items-center gap-2">
+      🌿 GreenChain
+    </h1>
+   <button onclick="connect()" class="bg-greenchain text-white px-4 py-2 rounded-xl hover:bg-green-800 transition">
+  Connect Wallet
+</button>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="text-center py-16 px-4 bg-white rounded-b-3xl shadow">
+    <h2 class="text-4xl font-bold mb-2">Decentralized Carbon Offset Marketplace</h2>
+    <p class="text-lg text-gray-600">Offset emissions. Earn NFTs. Fight climate change.</p>
+  </section>
+
+  <!-- Offset Submission -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+  <input id="name" type="text" placeholder="Your Name" class="p-3 border border-softgray rounded-xl" />
+<input id="activity" type="text" placeholder="What did you do? (e.g., Planted 500 trees)" class="p-3 border border-softgray rounded-xl" />
+<button onclick="submitOffset()" class="bg-greenchain text-white rounded-xl px-4 py-3 hover:bg-green-800">Submit Offset</button>
+    Submit Offset
+  </button>
+</div>
+
+  <!-- All Offsets -->
+  <div id="offsets" class="bg-white p-4 rounded-xl shadow">
+  <p class="text-gray-500">No offsets yet...</p>
+</div>
+
+  <!-- Carbon Leaderboard -->
+  <section class="max-w-4xl mx-auto my-10">
+    <h3 class="text-xl font-semibold mb-3">🏆 Top Offsetters</h3>
+    <div class="bg-white p-4 rounded-xl shadow">
+      <ul class="list-disc pl-6 text-gray-700">
+        <li>Ishita Pramod Bhosle — 500 trees</li>
+        <!-- Add more leaderboard entries here -->
+      </ul>
+    </div>
+  </section>
+
+  <!-- NFT Gallery -->
+  <section class="bg-white my-12 py-10 px-4 rounded-t-3xl shadow">
+    <h3 class="text-center text-2xl font-bold mb-6">🌍 Carbon Offset NFTs</h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+      <div class="border border-softgray rounded-xl p-4 shadow">
+        <img src="https://media.istockphoto.com/id/1412012308/photo/environment-earth-day-in-the-hands-holding-green-earth-on-bokeh-green-background-saving.jpg?s=612x612&w=0&k=20&c=MCpBmCjSnKm0XVQkiGBkBr_BXCvG1_ZIj0Kb4_ew6U0=" alt="NFT" class="rounded-lg mb-3"/>
+        <h4 class="font-semibold">C-NFT #001</h4>
+        <p class="text-sm text-gray-500">Planted 500 trees in Maharashtra</p>
+      </div>
+      <!-- More NFTs here -->
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="text-center p-6 text-gray-500 text-sm mt-10">
+    ©️ 2025 GreenChain | Built for Web3 SSH Hackathon
+  </footer>
+  <script src="main.js"></script>
 </body>
 </html>
